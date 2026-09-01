@@ -1,0 +1,159 @@
+{
+  "workspace_root": "Authoring workspace (not packaged; not required at runtime)",
+  "source_files_unchanged": true,
+  "source_xlsx": "input/Saudi_Consumer_Spending_SAMA_Validated_2020_2026.xlsx (authoring-time source; not packaged)",
+  "source_csv": "input/pos-transactions.csv (authoring-time source; not packaged)",
+  "outputs": [
+    {
+      "file": "Date.csv",
+      "rows": 2784,
+      "columns": [
+        "Date",
+        "Year",
+        "Quarter",
+        "Month Number",
+        "Month Name",
+        "Year-Month"
+      ],
+      "sha256": "82b79825561b27b8cbee5f1a69ad95bb21e570b77840f4262b4aecc094eaf82a",
+      "bytes": 101114
+    },
+    {
+      "file": "National_Weekly.csv",
+      "rows": 327,
+      "columns": [
+        "Week Start",
+        "Week End",
+        "Transaction Count",
+        "Transaction Value SAR",
+        "Average Ticket SAR",
+        "Data Status"
+      ],
+      "sha256": "25144c7cd86037e9d242eb49e808e515b6187c3e71276924c7c1db0c7981c460",
+      "bytes": 26877
+    },
+    {
+      "file": "Main_Cities_Weekly.csv",
+      "rows": 3260,
+      "columns": [
+        "Week Start",
+        "Week End",
+        "City",
+        "Transaction Count",
+        "Transaction Value SAR",
+        "Average Ticket SAR"
+      ],
+      "sha256": "fd89aef29e2181245419de051696f73f8e39c83d56af933f57799b5aa7263c6c",
+      "bytes": 212762
+    },
+    {
+      "file": "Categories_Weekly.csv",
+      "rows": 1102,
+      "columns": [
+        "Week Start",
+        "Week End",
+        "Category",
+        "Transaction Count",
+        "Transaction Value SAR",
+        "Average Ticket SAR"
+      ],
+      "sha256": "ebc27c32695b495218662934ee45a4f1c9088930258d86f6161673aab3f8fe63",
+      "bytes": 85787
+    },
+    {
+      "file": "Digital_Monthly.csv",
+      "rows": 90,
+      "columns": [
+        "Month",
+        "POS Sales SAR",
+        "POS Transactions",
+        "mada E-commerce Sales SAR",
+        "mada E-commerce Transactions"
+      ],
+      "sha256": "eceed090baed7e72ff42a3dc0dc46b5c539fcb57c5d0ee9749d0dc2fd5e59bfd",
+      "bytes": 4915
+    },
+    {
+      "file": "Measures.csv",
+      "rows": 1,
+      "columns": [
+        "Measure Holder"
+      ],
+      "sha256": "c4722edcc2c03c459bf4e684864e4306493a1e05fb9e443fd507934e6f54f0d2",
+      "bytes": 30
+    }
+  ],
+  "quality": {
+    "national_duplicate_week_end": 0,
+    "national_negative_metrics": 0,
+    "intentional_blank_week": [
+      {
+        "Week Start": "2026-07-12",
+        "Week End": "2026-07-18",
+        "Data Status": "MISSING — do not interpolate"
+      }
+    ],
+    "city_duplicate_keys": 0,
+    "city_list": [
+      "Abha",
+      "Buraidah",
+      "Dammam",
+      "Hail",
+      "Jeddah",
+      "Khobar",
+      "Madinah",
+      "Makkah",
+      "Riyadh",
+      "Tabuk"
+    ],
+    "category_duplicate_keys": 0,
+    "category_count_per_observed_week": [
+      19
+    ],
+    "category_list": [
+      "Apparel, Clothing & Accessories",
+      "Bakeries & Pastries",
+      "Construction & Building Materials",
+      "Education",
+      "Electronic & Electric Devices",
+      "Food & Beverages",
+      "Furniture & Home Supplies",
+      "Gas Stations",
+      "Health",
+      "Hotels",
+      "Jewelry",
+      "Laundry Services",
+      "Others",
+      "Professional & Business Services",
+      "Public Utilities & Services",
+      "Recreation & Culture",
+      "Restaurants & Cafés",
+      "Telecommunication",
+      "Transportation"
+    ],
+    "digital_missing_values": {
+      "Month": 0,
+      "POS Sales SAR": 0,
+      "POS Transactions": 0,
+      "mada E-commerce Sales SAR": 0,
+      "mada E-commerce Transactions": 0
+    }
+  },
+  "reconciliation": {
+    "latest_week": "2026-08-15",
+    "previous_available_week": "2026-08-08",
+    "latest_weekly_spending_sar": 14191529000.0,
+    "latest_weekly_transactions": 249682000.0,
+    "latest_average_ticket_sar": 56.83841446319719,
+    "weekly_spending_change_pct": -0.027711951202016638,
+    "weekly_transaction_change_pct": -0.014754104829512893,
+    "leading_city": "Riyadh",
+    "leading_city_spending_sar": 4839468000.0,
+    "leading_category": "Food & Beverages",
+    "leading_category_spending_sar": 2196275000.0,
+    "latest_digital_month": "2026-06-01",
+    "latest_mada_sales_share": 0.36912227078602544,
+    "mada_sales_yoy": 0.29503117622910136
+  },
+  "package_metadata_note": "Absolute authoring paths were normalized only in this staged audit copy. Prepared-file hashes and source-derived data were not changed."
+}

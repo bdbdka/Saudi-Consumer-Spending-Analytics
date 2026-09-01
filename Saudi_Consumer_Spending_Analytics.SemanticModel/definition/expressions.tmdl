@@ -1,0 +1,5 @@
+expression DataRoot = "C:\SaudiConsumerPortfolio\output\Saudi-Consumer-Spending-Analytics\data" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 88771b78-b089-50c3-8275-404a4852f7d5
+
+	annotation PBI_ResultType = Text
+

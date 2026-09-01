@@ -1,0 +1,56 @@
+/// Monthly POS and mada e-commerce measures restricted to the common January 2019 through June 2026 window.
+table Digital_Monthly
+	lineageTag: 642aebab-c1b6-5e60-8424-8a83d9ddcf12
+
+	column Month
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-MM
+		lineageTag: 1e2b8d88-7438-42c5-a95c-f8f65f7a4df8
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'POS Sales SAR'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6d276496-cde9-46fd-9e28-ec3f1c53a76c
+		summarizeBy: sum
+		sourceColumn: POS Sales SAR
+
+	column 'POS Transactions'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bd1e3006-45d3-4ce7-aa56-d0882deaedf0
+		summarizeBy: sum
+		sourceColumn: POS Transactions
+
+	column 'mada E-commerce Sales SAR'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6bbc43d2-2adf-4be5-99a5-2ca9955cffc4
+		summarizeBy: sum
+		sourceColumn: mada E-commerce Sales SAR
+
+	column 'mada E-commerce Transactions'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4445c236-94e0-4c65-9698-0d16acb2d41f
+		summarizeBy: sum
+		sourceColumn: mada E-commerce Transactions
+
+	partition Digital_Monthly = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataRoot & "\Digital_Monthly.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(PromotedHeaders, {{"Month", type date}, {"POS Sales SAR", Int64.Type}, {"POS Transactions", Int64.Type}, {"mada E-commerce Sales SAR", Int64.Type}, {"mada E-commerce Transactions", Int64.Type}}, "en-US")
+				in
+				    Typed
+

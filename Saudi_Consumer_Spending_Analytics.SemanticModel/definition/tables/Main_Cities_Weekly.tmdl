@@ -1,0 +1,66 @@
+/// Weekly POS spending and transactions for the ten tracked Saudi cities.
+table Main_Cities_Weekly
+	lineageTag: 82daf8ba-8fcf-5c0c-8b83-2667ab235925
+
+	column 'Week Start'
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-MM-dd
+		lineageTag: 5070a76b-633d-4d47-8077-1eb1ff70934c
+		summarizeBy: none
+		sourceColumn: Week Start
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Week End'
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-MM-dd
+		lineageTag: 5d29acd5-b9d8-43d9-9111-6c93a6a400c1
+		summarizeBy: none
+		sourceColumn: Week End
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column City
+		dataType: string
+		lineageTag: 5545acae-32f0-45e2-b6f1-368a44320458
+		summarizeBy: none
+		sourceColumn: City
+
+	column 'Transaction Count'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c80a3738-fdaf-4f86-8363-edfac92e0621
+		summarizeBy: sum
+		sourceColumn: Transaction Count
+
+	column 'Transaction Value SAR'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9519592b-c862-49a7-82af-2f9d4598ddfa
+		summarizeBy: sum
+		sourceColumn: Transaction Value SAR
+
+	column 'Average Ticket SAR'
+		dataType: double
+		isHidden
+		formatString: 0.00
+		lineageTag: f63ae462-92ad-4374-accd-bc068dc756c8
+		summarizeBy: sum
+		sourceColumn: Average Ticket SAR
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Main_Cities_Weekly = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataRoot & "\Main_Cities_Weekly.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(PromotedHeaders, {{"Week Start", type date}, {"Week End", type date}, {"City", type text}, {"Transaction Count", Int64.Type}, {"Transaction Value SAR", Int64.Type}, {"Average Ticket SAR", type number}}, "en-US")
+				in
+				    Typed
+

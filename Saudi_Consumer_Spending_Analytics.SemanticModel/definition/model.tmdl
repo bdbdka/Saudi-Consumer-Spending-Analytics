@@ -1,0 +1,22 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["Date","National_Weekly","Main_Cities_Weekly","Categories_Weekly","Digital_Monthly","_Measures","DataRoot"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Date
+ref table National_Weekly
+ref table Main_Cities_Weekly
+ref table Categories_Weekly
+ref table Digital_Monthly
+ref table _Measures
+

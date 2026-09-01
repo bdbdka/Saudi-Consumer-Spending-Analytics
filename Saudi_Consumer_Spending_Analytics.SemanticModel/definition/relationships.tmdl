@@ -1,0 +1,16 @@
+relationship 14787e10-5aec-52e1-a34b-8c8e62ad87cc
+	fromColumn: National_Weekly.'Week End'
+	toColumn: Date.Date
+
+relationship 05b41f94-5018-5c50-964b-3386c6416afd
+	fromColumn: Main_Cities_Weekly.'Week End'
+	toColumn: Date.Date
+
+relationship fad16342-02e2-512f-a6dd-bbd0094ae40c
+	fromColumn: Categories_Weekly.'Week End'
+	toColumn: Date.Date
+
+relationship 8475a8c3-e6e1-52d7-b258-5127b71a4893
+	fromColumn: Digital_Monthly.Month
+	toColumn: Date.Date
+

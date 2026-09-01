@@ -1,0 +1,66 @@
+/// Current taxonomy top-level categories only; total and detail rows are excluded to prevent double counting.
+table Categories_Weekly
+	lineageTag: c86a5d0f-3189-5c65-9fa0-535ae893bea6
+
+	column 'Week Start'
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-MM-dd
+		lineageTag: 11798f31-ed67-419b-835a-372c4933bd47
+		summarizeBy: none
+		sourceColumn: Week Start
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Week End'
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-MM-dd
+		lineageTag: de78f736-654c-4f87-a4be-a53ad4cd7966
+		summarizeBy: none
+		sourceColumn: Week End
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Category
+		dataType: string
+		lineageTag: b761b5be-9515-47b8-ab3d-d0c335928ad8
+		summarizeBy: none
+		sourceColumn: Category
+
+	column 'Transaction Count'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cfe8fb6a-7b1a-47c9-95af-4e9df170603b
+		summarizeBy: sum
+		sourceColumn: Transaction Count
+
+	column 'Transaction Value SAR'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 34413ef4-dfef-46d9-bd45-7932f706209e
+		summarizeBy: sum
+		sourceColumn: Transaction Value SAR
+
+	column 'Average Ticket SAR'
+		dataType: double
+		isHidden
+		formatString: 0.00
+		lineageTag: f2e8f915-63c5-4686-9033-623572402beb
+		summarizeBy: sum
+		sourceColumn: Average Ticket SAR
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Categories_Weekly = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataRoot & "\Categories_Weekly.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(PromotedHeaders, {{"Week Start", type date}, {"Week End", type date}, {"Category", type text}, {"Transaction Count", Int64.Type}, {"Transaction Value SAR", Int64.Type}, {"Average Ticket SAR", type number}}, "en-US")
+				in
+				    Typed
+

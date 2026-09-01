@@ -1,0 +1,100 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 857.19651250721279,
+            "y": 238.56840987911517
+          },
+          "nodeIndex": "_Measures",
+          "nodeLineageTag": "66512f73-6494-5051-b1e4-e10c0019de99",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 203.09398607680873
+          },
+          "nodeIndex": "Categories_Weekly",
+          "nodeLineageTag": "c86a5d0f-3189-5c65-9fa0-535ae893bea6",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 336.14058232878313,
+            "y": 226.57001059817838
+          },
+          "nodeIndex": "Date",
+          "nodeLineageTag": "11d5d693-cbc5-50fd-a136-1798a323f5ad",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 623.19651250721267,
+            "y": 312.04956624221359
+          },
+          "nodeIndex": "Digital_Monthly",
+          "nodeLineageTag": "642aebab-c1b6-5e60-8424-8a83d9ddcf12",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 336.09944911771368,
+            "y": 503.13681975823033
+          },
+          "nodeIndex": "Main_Cities_Weekly",
+          "nodeLineageTag": "82daf8ba-8fcf-5c0c-8b83-2667ab235925",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 411.69045248340353,
+            "y": -50
+          },
+          "nodeIndex": "National_Weekly",
+          "nodeLineageTag": "1c01f668-34d6-5829-b5a7-285c195ac405",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

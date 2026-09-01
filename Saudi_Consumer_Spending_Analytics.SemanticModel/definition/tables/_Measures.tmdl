@@ -1,0 +1,441 @@
+/// Explicit DAX measures organized into presentation folders.
+table _Measures
+	lineageTag: 66512f73-6494-5051-b1e4-e10c0019de99
+
+	/// National POS spending in SAR for the active filter context.
+	measure 'Total POS Spending' = SUM(National_Weekly[Transaction Value SAR])
+		formatString: 0
+		displayFolder: 01 Executive
+		lineageTag: 8076a4e6-25ba-5b8a-ab32-e9d247b98422
+
+	/// National POS transaction count for the active filter context.
+	measure 'Total POS Transactions' = SUM(National_Weekly[Transaction Count])
+		formatString: 0
+		displayFolder: 01 Executive
+		lineageTag: 845e810f-2334-5582-99ec-93b23e739b61
+
+	/// Weighted national average ticket in SAR.
+	measure 'Average Transaction Value' = DIVIDE([Total POS Spending], [Total POS Transactions])
+		formatString: 0.00
+		displayFolder: 01 Executive
+		lineageTag: 78a37b05-7ad4-5404-9981-7e0677517152
+
+	/// Latest selected date with a nonblank national spending observation.
+	measure 'Latest Week' = VAR _dates = FILTER(ALLSELECTED('Date'[Date]), CALCULATE(COUNTROWS(FILTER(National_Weekly, NOT ISBLANK(National_Weekly[Transaction Value SAR])))) > 0) RETURN MAXX(_dates, 'Date'[Date])
+		formatString: yyyy-MM-dd
+		displayFolder: 01 Executive
+		lineageTag: e4c6a896-056e-5f0b-a83f-b923ba448971
+
+	/// Most recent prior date with a nonblank national observation; handles intentional gaps.
+	measure 'Previous Available Week' = VAR _latest = [Latest Week] RETURN MAXX(FILTER(ALL('Date'[Date]), 'Date'[Date] < _latest && CALCULATE(COUNTROWS(FILTER(National_Weekly, NOT ISBLANK(National_Weekly[Transaction Value SAR])))) > 0), 'Date'[Date])
+		formatString: yyyy-MM-dd
+		displayFolder: 01 Executive
+		lineageTag: 8988b64b-06c6-5b6f-a23f-ff3e9c3fac58
+
+	/// National POS spending at the latest available week.
+	measure 'Latest Weekly Spending' = VAR _d = [Latest Week] RETURN CALCULATE([Total POS Spending], REMOVEFILTERS('Date'), TREATAS({_d}, 'Date'[Date]))
+		formatString: 0
+		displayFolder: 01 Executive
+		lineageTag: 99b60b87-3b7c-5713-b4d7-d41a7769bbb3
+
+	/// National POS transactions at the latest available week.
+	measure 'Latest Weekly Transactions' = VAR _d = [Latest Week] RETURN CALCULATE([Total POS Transactions], REMOVEFILTERS('Date'), TREATAS({_d}, 'Date'[Date]))
+		formatString: 0
+		displayFolder: 01 Executive
+		lineageTag: c59c5a0e-bf26-5153-9d2b-af20e11fedc1
+
+	/// Latest weekly weighted average ticket in SAR.
+	measure 'Latest Average Ticket' = DIVIDE([Latest Weekly Spending], [Latest Weekly Transactions])
+		formatString: 0.00
+		displayFolder: 01 Executive
+		lineageTag: f268d0a9-0c65-53e8-a60b-cc1ea5ed39bb
+
+	/// National spending at the previous available week.
+	measure 'Previous Available Week Spending' = VAR _d = [Previous Available Week] RETURN CALCULATE([Total POS Spending], REMOVEFILTERS('Date'), TREATAS({_d}, 'Date'[Date]))
+		formatString: 0
+		displayFolder: 01 Executive
+		lineageTag: 486e1c34-d19b-51db-8f37-509a43beac2e
+
+	/// National transactions at the previous available week.
+	measure 'Previous Available Week Transactions' = VAR _d = [Previous Available Week] RETURN CALCULATE([Total POS Transactions], REMOVEFILTERS('Date'), TREATAS({_d}, 'Date'[Date]))
+		formatString: 0
+		displayFolder: 01 Executive
+		lineageTag: 6de21cc5-59d3-5905-91e3-bbba3ae936bf
+
+	/// Week-over-week spending change using the previous available observation.
+	measure 'Weekly Spending Change %' = DIVIDE([Latest Weekly Spending] - [Previous Available Week Spending], [Previous Available Week Spending])
+		formatString: 0.0%
+		displayFolder: 01 Executive
+		lineageTag: 16f11e11-0e88-5772-ae08-0f34cc6e4839
+
+	/// Week-over-week transaction change using the previous available observation.
+	measure 'Weekly Transaction Change %' = DIVIDE([Latest Weekly Transactions] - [Previous Available Week Transactions], [Previous Available Week Transactions])
+		formatString: 0.0%
+		displayFolder: 01 Executive
+		lineageTag: 11b77d46-4c6f-5408-9bd3-f7935d5671ee
+
+	/// Latest weekly spending in SAR billions.
+	measure 'Latest Weekly Spending SAR B' = DIVIDE([Latest Weekly Spending], 1000000000)
+		formatString: 0.00
+		displayFolder: 01 Executive
+		lineageTag: b36341ac-0583-521e-aa2b-7b7e4212ce48
+
+	/// Latest weekly transactions in millions.
+	measure 'Latest Weekly Transactions M' = DIVIDE([Latest Weekly Transactions], 1000000)
+		formatString: 0.00
+		displayFolder: 01 Executive
+		lineageTag: 97b540a4-bc8f-5965-9fc4-25a5d151e7df
+
+	/// Weekly national POS spending in SAR billions.
+	measure 'Weekly POS Spending SAR B' = DIVIDE([Total POS Spending], 1000000000)
+		formatString: 0.00
+		displayFolder: 01 Executive
+		lineageTag: 71aea3cf-5182-5f21-94d4-6d635abe182e
+
+	/// Weekly national POS transactions in millions.
+	measure 'Weekly POS Transactions M' = DIVIDE([Total POS Transactions], 1000000)
+		formatString: 0.00
+		displayFolder: 01 Executive
+		lineageTag: f920ffa9-5ece-5449-9410-7d4382579599
+
+	/// Human-readable latest-week label.
+	measure 'Latest Week Label' = FORMAT([Latest Week], "dd MMM yyyy")
+		displayFolder: 01 Executive
+		lineageTag: 3752c181-7199-5719-9ffa-2ec1387b3056
+
+	/// Tracked-city POS spending in SAR.
+	measure 'City Spending' = SUM(Main_Cities_Weekly[Transaction Value SAR])
+		formatString: 0
+		displayFolder: 02 Cities
+		lineageTag: d79bbed1-f658-5e29-a23c-c54f2aeb903d
+
+	/// Tracked-city POS transactions.
+	measure 'City Transactions' = SUM(Main_Cities_Weekly[Transaction Count])
+		formatString: 0
+		displayFolder: 02 Cities
+		lineageTag: 01234baa-0800-54ed-ab38-5e4e6a083b21
+
+	/// Weighted tracked-city average ticket in SAR.
+	measure 'City Average Ticket' = DIVIDE([City Spending], [City Transactions])
+		formatString: 0.00
+		displayFolder: 02 Cities
+		lineageTag: 00228cf0-aa6a-5d95-bd22-456c664291ca
+
+	/// Latest city observation date independent of city selection.
+	measure 'Latest City Week' = MAXX(FILTER(ALL('Date'[Date]), CALCULATE(COUNTROWS(Main_Cities_Weekly), REMOVEFILTERS(Main_Cities_Weekly[City])) > 0), 'Date'[Date])
+		formatString: yyyy-MM-dd
+		displayFolder: 02 Cities
+		lineageTag: 94044926-8c03-59c3-81ff-71a164409a18
+
+	/// City spending at the latest city week.
+	measure 'Latest City Spending' = VAR _d = [Latest City Week] RETURN CALCULATE([City Spending], REMOVEFILTERS('Date'), TREATAS({_d}, 'Date'[Date]))
+		formatString: 0
+		displayFolder: 02 Cities
+		lineageTag: d42837ab-0313-5847-b68c-057a3983923d
+
+	/// City transactions at the latest city week.
+	measure 'Latest City Transactions' = VAR _d = [Latest City Week] RETURN CALCULATE([City Transactions], REMOVEFILTERS('Date'), TREATAS({_d}, 'Date'[Date]))
+		formatString: 0
+		displayFolder: 02 Cities
+		lineageTag: 82f34158-6627-536b-9b21-b53d5a5f9849
+
+	/// Latest weighted city average ticket in SAR.
+	measure 'Latest City Average Ticket' = DIVIDE([Latest City Spending], [Latest City Transactions])
+		formatString: 0.00
+		displayFolder: 02 Cities
+		lineageTag: 44f7261c-f85e-5769-9213-0298e480684e
+
+	/// Selected city, with Riyadh as the default fallback.
+	measure 'Selected City Name' = SELECTEDVALUE(Main_Cities_Weekly[City], "Riyadh")
+		displayFolder: 02 Cities
+		lineageTag: cd2b1710-6ebc-581d-9a9b-e54514674757
+
+	/// Latest spending for the selected city.
+	measure 'Selected City Latest Spending' = VAR _city = [Selected City Name] RETURN CALCULATE([Latest City Spending], REMOVEFILTERS(Main_Cities_Weekly[City]), TREATAS({_city}, Main_Cities_Weekly[City]))
+		formatString: 0
+		displayFolder: 02 Cities
+		lineageTag: b5fd15df-08e0-52be-86f8-fecf4b9e2d82
+
+	/// Latest transactions for the selected city.
+	measure 'Selected City Latest Transactions' = VAR _city = [Selected City Name] RETURN CALCULATE([Latest City Transactions], REMOVEFILTERS(Main_Cities_Weekly[City]), TREATAS({_city}, Main_Cities_Weekly[City]))
+		formatString: 0
+		displayFolder: 02 Cities
+		lineageTag: 3fa7bff3-1750-53dd-af8c-21dbd18fd9e2
+
+	/// Latest average ticket for the selected city.
+	measure 'Selected City Latest Average Ticket' = DIVIDE([Selected City Latest Spending], [Selected City Latest Transactions])
+		formatString: 0.00
+		displayFolder: 02 Cities
+		lineageTag: 0eca0557-dcb1-5fa7-a004-d0f3830a423f
+
+	/// Weekly spending trend for the selected city.
+	measure 'Selected City Spending' = VAR _city = [Selected City Name] RETURN CALCULATE([City Spending], REMOVEFILTERS(Main_Cities_Weekly[City]), TREATAS({_city}, Main_Cities_Weekly[City]))
+		formatString: 0
+		displayFolder: 02 Cities
+		lineageTag: 7ed6eb43-8bc7-59ab-b2c7-50abf5b10ae4
+
+	/// Weekly transaction trend for the selected city.
+	measure 'Selected City Transactions' = VAR _city = [Selected City Name] RETURN CALCULATE([City Transactions], REMOVEFILTERS(Main_Cities_Weekly[City]), TREATAS({_city}, Main_Cities_Weekly[City]))
+		formatString: 0
+		displayFolder: 02 Cities
+		lineageTag: 3d7e93ae-6a78-5d0c-9581-1216bcaf5b8f
+
+	/// Weighted average ticket for the selected city in the active date context.
+	measure 'Selected City Average Ticket' = DIVIDE([Selected City Spending], [Selected City Transactions])
+		formatString: 0.00
+		displayFolder: 02 Cities
+		lineageTag: 72ecd5cc-0a13-50ad-8892-b52f55d2ca07
+
+	/// Top city by latest-week spending.
+	measure 'Leading City' = VAR _t = TOPN(1, ADDCOLUMNS(ALL(Main_Cities_Weekly[City]), "__v", [Latest City Spending]), [__v], DESC, Main_Cities_Weekly[City], ASC) RETURN MAXX(_t, Main_Cities_Weekly[City])
+		displayFolder: 02 Cities
+		lineageTag: 083eeced-164f-5719-8d67-531a6e7ee5a1
+
+	/// Selected-city share of spending across the ten tracked cities at the latest week.
+	measure 'Selected City Share of Tracked Top 10 Cities' = DIVIDE([Selected City Latest Spending], CALCULATE([Latest City Spending], REMOVEFILTERS(Main_Cities_Weekly[City])))
+		formatString: 0.0%
+		displayFolder: 02 Cities
+		lineageTag: 853d3041-0316-5a2d-a021-a00e039004bc
+
+	/// Latest city spending in SAR billions for ranking.
+	measure 'Latest City Spending SAR B' = DIVIDE([Latest City Spending], 1000000000)
+		formatString: 0.00
+		displayFolder: 02 Cities
+		lineageTag: 577621f4-7485-54cc-8d6c-f4dff2b3e4d3
+
+	/// Selected-city latest spending in SAR billions.
+	measure 'Selected City Latest Spending SAR B' = DIVIDE([Selected City Latest Spending], 1000000000)
+		formatString: 0.00
+		displayFolder: 02 Cities
+		lineageTag: 49d541e6-6d87-5190-9a4d-1cdcf8bc2e3e
+
+	/// Selected-city latest transactions in millions.
+	measure 'Selected City Latest Transactions M' = DIVIDE([Selected City Latest Transactions], 1000000)
+		formatString: 0.00
+		displayFolder: 02 Cities
+		lineageTag: d4602f19-abc7-58f5-b0b0-2e14c45c44a8
+
+	/// Selected-city weekly spending trend in SAR billions.
+	measure 'Selected City Spending SAR B' = DIVIDE([Selected City Spending], 1000000000)
+		formatString: 0.00
+		displayFolder: 02 Cities
+		lineageTag: 8876f06c-c964-528d-9578-6fd5d4371a86
+
+	/// Selected-city weekly transactions in millions.
+	measure 'Selected City Transactions M' = DIVIDE([Selected City Transactions], 1000000)
+		formatString: 0.00
+		displayFolder: 02 Cities
+		lineageTag: 677a53c8-4272-590a-8dc9-bf708a6a7c89
+
+	/// Current-taxonomy category spending in SAR.
+	measure 'Category Spending' = SUM(Categories_Weekly[Transaction Value SAR])
+		formatString: 0
+		displayFolder: 03 Categories
+		lineageTag: 37c10752-5234-532c-849e-620988a48d97
+
+	/// Current-taxonomy category transactions.
+	measure 'Category Transactions' = SUM(Categories_Weekly[Transaction Count])
+		formatString: 0
+		displayFolder: 03 Categories
+		lineageTag: 11eb8c59-71b2-5155-8269-05017c46b9eb
+
+	/// Weighted category average ticket in SAR.
+	measure 'Category Average Ticket' = DIVIDE([Category Spending], [Category Transactions])
+		formatString: 0.00
+		displayFolder: 03 Categories
+		lineageTag: 11718c42-81a4-5d94-8889-4df0576be56c
+
+	/// Latest current-taxonomy category observation date.
+	measure 'Latest Category Week' = MAXX(FILTER(ALL('Date'[Date]), CALCULATE(COUNTROWS(Categories_Weekly), REMOVEFILTERS(Categories_Weekly[Category])) > 0), 'Date'[Date])
+		formatString: yyyy-MM-dd
+		displayFolder: 03 Categories
+		lineageTag: 30049744-9884-5bfe-8cd0-645c656d85fb
+
+	/// Category spending at the latest category week.
+	measure 'Latest Category Spending' = VAR _d = [Latest Category Week] RETURN CALCULATE([Category Spending], REMOVEFILTERS('Date'), TREATAS({_d}, 'Date'[Date]))
+		formatString: 0
+		displayFolder: 03 Categories
+		lineageTag: 02bd5b69-baa2-5d54-94c9-c7cdaa6534b1
+
+	/// Category transactions at the latest category week.
+	measure 'Latest Category Transactions' = VAR _d = [Latest Category Week] RETURN CALCULATE([Category Transactions], REMOVEFILTERS('Date'), TREATAS({_d}, 'Date'[Date]))
+		formatString: 0
+		displayFolder: 03 Categories
+		lineageTag: 73c33cfa-781c-5acf-9c82-d3c5a8e7adc0
+
+	/// Selected category, with Food & Beverages as the default fallback.
+	measure 'Selected Category Name' = SELECTEDVALUE(Categories_Weekly[Category], "Food & Beverages")
+		displayFolder: 03 Categories
+		lineageTag: edd305bf-acf5-51e7-9b12-95890484e87e
+
+	/// Latest spending for the selected category.
+	measure 'Selected Category Latest Spending' = VAR _category = [Selected Category Name] RETURN CALCULATE([Latest Category Spending], REMOVEFILTERS(Categories_Weekly[Category]), TREATAS({_category}, Categories_Weekly[Category]))
+		formatString: 0
+		displayFolder: 03 Categories
+		lineageTag: 9141629a-e233-5e36-bdcc-1a77464f3e15
+
+	/// Latest transactions for the selected category.
+	measure 'Selected Category Latest Transactions' = VAR _category = [Selected Category Name] RETURN CALCULATE([Latest Category Transactions], REMOVEFILTERS(Categories_Weekly[Category]), TREATAS({_category}, Categories_Weekly[Category]))
+		formatString: 0
+		displayFolder: 03 Categories
+		lineageTag: 34796e29-7840-53ad-8b80-1c5216ad6be3
+
+	/// Latest weighted average ticket for the selected category.
+	measure 'Selected Category Latest Average Ticket' = DIVIDE([Selected Category Latest Spending], [Selected Category Latest Transactions])
+		formatString: 0.00
+		displayFolder: 03 Categories
+		lineageTag: 32d92998-d609-563b-814b-bcd4c49dd730
+
+	/// Weekly spending trend for the selected category.
+	measure 'Selected Category Spending' = VAR _category = [Selected Category Name] RETURN CALCULATE([Category Spending], REMOVEFILTERS(Categories_Weekly[Category]), TREATAS({_category}, Categories_Weekly[Category]))
+		formatString: 0
+		displayFolder: 03 Categories
+		lineageTag: 1d6bc5a3-8791-5a5d-98cf-6fa9807c242e
+
+	/// Transactions for the selected category in the active date context.
+	measure 'Selected Category Transactions' = VAR _category = [Selected Category Name] RETURN CALCULATE([Category Transactions], REMOVEFILTERS(Categories_Weekly[Category]), TREATAS({_category}, Categories_Weekly[Category]))
+		formatString: 0
+		displayFolder: 03 Categories
+		lineageTag: aad46271-9ba0-55b6-a6ba-ac2120c34384
+
+	/// Weighted average ticket for the selected category in the active date context.
+	measure 'Selected Category Average Ticket' = DIVIDE([Selected Category Spending], [Selected Category Transactions])
+		formatString: 0.00
+		displayFolder: 03 Categories
+		lineageTag: 1f4e7843-b6d5-5446-9042-d2b5a2242725
+
+	/// Top current-taxonomy category by latest-week spending.
+	measure 'Leading Category' = VAR _t = TOPN(1, ADDCOLUMNS(ALL(Categories_Weekly[Category]), "__v", [Latest Category Spending]), [__v], DESC, Categories_Weekly[Category], ASC) RETURN MAXX(_t, Categories_Weekly[Category])
+		displayFolder: 03 Categories
+		lineageTag: b8537672-e49c-5e14-a72a-af051fd23054
+
+	/// Dynamic latest-week category spending rank.
+	measure 'Category Rank' = RANKX(ALL(Categories_Weekly[Category]), [Latest Category Spending], , DESC, Dense)
+		formatString: 0
+		displayFolder: 03 Categories
+		lineageTag: 3c56e8b9-b29d-5b47-a1f0-56a2a65c2c36
+
+	/// Latest category spending in SAR billions, blank outside the dynamic top eight.
+	measure 'Top 8 Categories Latest Spending SAR B' = IF([Category Rank] <= 8, DIVIDE([Latest Category Spending], 1000000000))
+		formatString: 0.00
+		displayFolder: 03 Categories
+		lineageTag: bb98edc4-8077-5f05-ac61-94d5763245e5
+
+	/// Selected-category latest spending in SAR billions.
+	measure 'Selected Category Latest Spending SAR B' = DIVIDE([Selected Category Latest Spending], 1000000000)
+		formatString: 0.00
+		displayFolder: 03 Categories
+		lineageTag: b753d421-e97c-50c8-9bb6-e1863154f5c6
+
+	/// Selected-category latest transactions in millions.
+	measure 'Selected Category Latest Transactions M' = DIVIDE([Selected Category Latest Transactions], 1000000)
+		formatString: 0.00
+		displayFolder: 03 Categories
+		lineageTag: 32cbd91b-c76a-59e1-81f9-fff971f6568f
+
+	/// Selected-category weekly spending trend in SAR billions.
+	measure 'Selected Category Spending SAR B' = DIVIDE([Selected Category Spending], 1000000000)
+		formatString: 0.00
+		displayFolder: 03 Categories
+		lineageTag: a0105240-4e2d-5f66-b8a4-ff3d4221c57d
+
+	/// Monthly POS sales in SAR.
+	measure 'POS Monthly Sales' = SUM(Digital_Monthly[POS Sales SAR])
+		formatString: 0
+		displayFolder: 04 Digital
+		lineageTag: e83a2a2e-cc22-5636-8be2-decee1ed60f1
+
+	/// Monthly mada e-commerce sales in SAR.
+	measure 'mada E-commerce Sales' = SUM(Digital_Monthly[mada E-commerce Sales SAR])
+		formatString: 0
+		displayFolder: 04 Digital
+		lineageTag: 6cd64733-f127-5aae-96ec-13397df4e761
+
+	/// Combined POS and mada e-commerce monthly sales.
+	measure 'Total Card Sales' = [POS Monthly Sales] + [mada E-commerce Sales]
+		formatString: 0
+		displayFolder: 04 Digital
+		lineageTag: c278de1a-6676-5c06-bce5-da780851b98d
+
+	/// mada e-commerce share of combined POS and mada sales.
+	measure 'mada Sales Share' = DIVIDE([mada E-commerce Sales], [Total Card Sales])
+		formatString: 0.0%
+		displayFolder: 04 Digital
+		lineageTag: 45d5aa98-75b4-5eec-bf96-ec4e68e68ce8
+
+	/// Monthly POS transaction count.
+	measure 'POS Monthly Transactions' = SUM(Digital_Monthly[POS Transactions])
+		formatString: 0
+		displayFolder: 04 Digital
+		lineageTag: e5ad6336-4fc5-5c94-9c58-a73845e6d689
+
+	/// Monthly mada e-commerce transaction count.
+	measure 'mada E-commerce Transactions' = SUM(Digital_Monthly[mada E-commerce Transactions])
+		formatString: 0
+		displayFolder: 04 Digital
+		lineageTag: 8b0faf8e-9308-528b-9fa7-35781555ead0
+
+	/// Latest monthly digital observation.
+	measure 'Latest Digital Month' = MAXX(FILTER(ALL('Date'[Date]), CALCULATE(COUNTROWS(Digital_Monthly)) > 0), 'Date'[Date])
+		formatString: yyyy-MM
+		displayFolder: 04 Digital
+		lineageTag: 3991c82b-d3ec-53ae-9b4e-a9500f4862fc
+
+	/// mada sales share at the latest monthly observation.
+	measure 'Latest mada Sales Share' = VAR _d = [Latest Digital Month] RETURN CALCULATE([mada Sales Share], REMOVEFILTERS('Date'), TREATAS({_d}, 'Date'[Date]))
+		formatString: 0.0%
+		displayFolder: 04 Digital
+		lineageTag: dd5c5f79-90b6-5386-b72f-cbddf5e0ee8e
+
+	/// mada e-commerce sales at the latest monthly observation.
+	measure 'Latest mada Sales' = VAR _d = [Latest Digital Month] RETURN CALCULATE([mada E-commerce Sales], REMOVEFILTERS('Date'), TREATAS({_d}, 'Date'[Date]))
+		formatString: 0
+		displayFolder: 04 Digital
+		lineageTag: 05f0de2c-caf9-528e-ab3f-d89958955e62
+
+	/// Latest mada e-commerce sales year-over-year growth.
+	measure 'mada Sales YoY' = VAR _d = [Latest Digital Month] VAR _current = CALCULATE([mada E-commerce Sales], REMOVEFILTERS('Date'), TREATAS({_d}, 'Date'[Date])) VAR _prior = CALCULATE([mada E-commerce Sales], REMOVEFILTERS('Date'), TREATAS({EDATE(_d, -12)}, 'Date'[Date])) RETURN DIVIDE(_current - _prior, _prior)
+		formatString: 0.0%
+		displayFolder: 04 Digital
+		lineageTag: 9147c870-5702-50b4-ae06-a9b4f56e325f
+
+	/// Monthly POS sales in SAR billions.
+	measure 'POS Monthly Sales SAR B' = DIVIDE([POS Monthly Sales], 1000000000)
+		formatString: 0.00
+		displayFolder: 04 Digital
+		lineageTag: 1ac317c5-5942-5773-a2cd-d2010b87b7fd
+
+	/// Monthly mada e-commerce sales in SAR billions.
+	measure 'mada E-commerce Sales SAR B' = DIVIDE([mada E-commerce Sales], 1000000000)
+		formatString: 0.00
+		displayFolder: 04 Digital
+		lineageTag: b10ddce1-e341-55ad-bd95-18c9ea3aca7f
+
+	/// Monthly POS transactions in millions.
+	measure 'POS Monthly Transactions M' = DIVIDE([POS Monthly Transactions], 1000000)
+		formatString: 0.00
+		displayFolder: 04 Digital
+		lineageTag: f70f856b-8c7f-5cc0-8d2f-5c8a0c2b5ff3
+
+	/// Monthly mada e-commerce transactions in millions.
+	measure 'mada E-commerce Transactions M' = DIVIDE([mada E-commerce Transactions], 1000000)
+		formatString: 0.00
+		displayFolder: 04 Digital
+		lineageTag: 42872900-ba11-53e4-8ba0-47c2655a306e
+
+	column 'Measure Holder'
+		dataType: string
+		isHidden
+		lineageTag: 99bd65cf-15f3-516b-becd-85e227facacd
+		sourceColumn: Measure Holder
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataRoot & "\Measures.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(PromotedHeaders, {{"Measure Holder", type text}}, "en-US")
+				in
+				    Typed
+

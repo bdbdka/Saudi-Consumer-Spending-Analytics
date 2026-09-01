@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Saudi Consumer Spending Analytics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "aa1d51e5-6006-53f0-a476-b7a459da8e66"
+  }
+}

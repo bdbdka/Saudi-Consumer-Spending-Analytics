@@ -1,0 +1,27 @@
+# Power BI machine-local state
+**/.pbi/
+
+# Temporary local files
+*.tmp
+*.temp
+*.log
+*.bak
+*.zip
+~$*
+temp/
+tmp/
+
+# Local working copies
+backup/
+backups/
+old/
+broken/
+.private/
+
+# OS/editor metadata
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/

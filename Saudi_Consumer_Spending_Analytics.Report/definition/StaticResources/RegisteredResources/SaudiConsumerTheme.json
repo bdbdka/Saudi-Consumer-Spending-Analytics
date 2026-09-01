@@ -1,0 +1,28 @@
+{
+  "name": "Saudi Consumer Portfolio",
+  "dataColors": [
+    "#006C35",
+    "#C89B3C",
+    "#2E7D78",
+    "#064E3B",
+    "#8AAE9B",
+    "#D8C08D"
+  ],
+  "background": "#F5F7F5",
+  "foreground": "#1F2937",
+  "tableAccent": "#006C35",
+  "textClasses": {
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "color": "#064E3B"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "color": "#4B5563"
+    },
+    "callout": {
+      "fontFace": "Segoe UI Semibold",
+      "color": "#064E3B"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+/// Shared calendar from January 2019 through the latest weekly observation.
+table Date
+	lineageTag: 11d5d693-cbc5-50fd-a136-1798a323f5ad
+	dataCategory: Time
+
+	/// Calendar date used by all fact tables.
+	column Date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 538c55c9-95c1-4795-bc6c-87ced11c8ac6
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: int64
+		lineageTag: e90ba22f-da57-488a-8243-e70c72d5e067
+		summarizeBy: none
+		sourceColumn: Year
+
+	column Quarter
+		dataType: string
+		lineageTag: cd464b5f-3baa-42d2-a77d-726b3ee060c1
+		summarizeBy: none
+		sourceColumn: Quarter
+
+	column 'Month Number'
+		dataType: int64
+		isHidden
+		lineageTag: 9d62d8cd-ad2f-44c9-8035-374b474e6293
+		summarizeBy: none
+		sourceColumn: Month Number
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: fe0faad8-31b9-4a8a-9040-d653e6bcbf33
+		summarizeBy: none
+		sourceColumn: Month Name
+		sortByColumn: 'Month Number'
+
+	column Year-Month
+		dataType: string
+		lineageTag: 18031887-a6f9-44fa-b8e0-8e011121eca0
+		summarizeBy: none
+		sourceColumn: Year-Month
+
+	partition Date = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataRoot & "\Date.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(PromotedHeaders, {{"Date", type date}, {"Year", Int64.Type}, {"Quarter", type text}, {"Month Number", Int64.Type}, {"Month Name", type text}, {"Year-Month", type text}}, "en-US")
+				in
+				    Typed
+
